@@ -7,6 +7,31 @@
         path = require( 'path' ),
         mainModule = require( '../src' );
 
+    suite( 'getContent', function() {
+        test( 'It works with a single line', function() {
+            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'singleLine.txt' ) )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    assert.equal( mainModule.getContent( textEditor ), 'aaa bbb' );
+                } );
+        } );
+
+        test( 'It works with a multiple lines', function() {
+            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'multiLine.txt' ) )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    let expected = 'aaa bbb\n' +
+                        'ccc ddd\n' +
+                        'eee fff';
+                    assert.equal( mainModule.getContent( textEditor ), expected );
+                } );
+        } );
+    } );
+
     suite( 'getContentWithSelections', function() {
         test( 'It returns a single collapsed selection', function() {
             return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'singleLine.txt' ) )
