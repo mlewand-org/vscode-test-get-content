@@ -14,7 +14,7 @@
                     return vscode.window.showTextDocument( doc );
                 } )
                 .then( textEditor => {
-                    assert.equal( mainModule.getContent( textEditor ), 'aaa bbb' );
+                    assert.equal( mainModule( textEditor ), 'aaa bbb' );
                 } );
         } );
 
@@ -27,12 +27,12 @@
                     let expected = 'aaa bbb\n' +
                         'ccc ddd\n' +
                         'eee fff';
-                    assert.equal( mainModule.getContent( textEditor ), expected );
+                    assert.equal( mainModule( textEditor ), expected );
                 } );
         } );
     } );
 
-    suite( 'getContentWithSelections', function() {
+    suite( 'getContent.withSelections', function() {
         test( 'It returns a single collapsed selection', function() {
             return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'singleLine.txt' ) )
                 .then( ( doc ) => {
@@ -40,7 +40,7 @@
                 } )
                 .then( textEditor => {
                     textEditor.selection = new vscode.Selection( 0, 1, 0, 1 );
-                    assert.equal( mainModule.getContentWithSelections( textEditor ), 'a^aa bbb' );
+                    assert.equal( mainModule.withSelection( textEditor ), 'a^aa bbb' );
                 } );
         } );
 
@@ -55,7 +55,7 @@
                         'eee fff';
 
                     textEditor.selection = new vscode.Selection( 0, 4, 0, 4 );
-                    assert.equal( mainModule.getContentWithSelections( textEditor ), expected );
+                    assert.equal( mainModule.withSelection( textEditor ), expected );
                 } );
         } );
 
@@ -75,7 +75,7 @@
                         new vscode.Selection( 1, 7, 1, 7 ),
                         new vscode.Selection( 2, 0, 2, 0 )
                     ];
-                    assert.equal( mainModule.getContentWithSelections( textEditor ), expected );
+                    assert.equal( mainModule.withSelection( textEditor ), expected );
                 } );
         } );
 
@@ -86,7 +86,7 @@
                 } )
                 .then( textEditor => {
                     textEditor.selection = new vscode.Selection( 0, 1, 0, 3 );
-                    assert.equal( mainModule.getContentWithSelections( textEditor ), 'a[aa} bbb' );
+                    assert.equal( mainModule.withSelection( textEditor ), 'a[aa} bbb' );
                 } );
         } );
 
@@ -104,7 +104,7 @@
                         new vscode.Selection( 0, 1, 0, 3 ),
                         new vscode.Selection( 1, 5, 1, 1 )
                     ];
-                    assert.equal( mainModule.getContentWithSelections( textEditor ), expected );
+                    assert.equal( mainModule.withSelection( textEditor ), expected );
                 } );
         } );
 
@@ -122,7 +122,7 @@
                         new vscode.Selection( 0, 1, 0, 1 ),
                         new vscode.Selection( 1, 1, 1, 4 )
                     ];
-                    assert.equal( mainModule.getContentWithSelections( textEditor ), expected );
+                    assert.equal( mainModule.withSelection( textEditor ), expected );
                 } );
         } );
     } );
@@ -131,12 +131,12 @@
         const getContent = require( '../src' );
 
         test( 'getContent example', function() {
-            return vscode.workspace.openTextDocument(  __dirname + '/_fixtures/myFancyFile.txt' )
+            return vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
                 .then( ( doc ) => {
                     return vscode.window.showTextDocument( doc );
                 } )
                 .then( textEditor => {
-                    assert.equal( getContent.getContent( textEditor ), 'let text = "hello world!";' );
+                    assert.equal( getContent( textEditor ), 'let text = "hello world!";' );
                 } );
         } );
 
@@ -148,7 +148,7 @@
                 .then( textEditor => {
                     // [, ], { and } characters mark a ranged selection.
                     textEditor.selection = new vscode.Selection( 0, 4, 0, 8 );
-                    assert.equal( getContent.getContentWithSelections( textEditor ), 'let [text} = "hello world!";' );
+                    assert.equal( getContent.withSelection( textEditor ), 'let [text} = "hello world!";' );
                 } );
         } );
     } );

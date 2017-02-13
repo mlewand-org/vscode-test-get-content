@@ -16,7 +16,7 @@ vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
 		return vscode.window.showTextDocument( doc );
 	} )
 	.then( textEditor => {
-		assert.equal( getContent.getContent( textEditor ), 'let text = "hello world!";' );
+		assert.equal( getContent( textEditor ), 'let text = "hello world!";' );
 	} );
 ```
 
@@ -31,7 +31,7 @@ vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
 	.then( textEditor => {
 		// [, ], { and } characters mark a ranged selection.
 		textEditor.selection = new vscode.Selection( 0, 4, 0, 8 );
-		assert.equal( getContent.getContentWithSelections( textEditor ), 'let [text} = "hello world!";' );
+		assert.equal( getContent.withSelection( textEditor ), 'let [text} = "hello world!";' );
 	} );
 ```
 
