@@ -126,4 +126,30 @@
                 } );
         } );
     } );
+
+    suite( 'Readme.md examples', function() {
+        const getContent = require( '../src' );
+
+        test( 'getContent example', function() {
+            return vscode.workspace.openTextDocument(  __dirname + '/_fixtures/myFancyFile.txt' )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    assert.equal( getContent.getContent( textEditor ), 'let text = "hello world!";' );
+                } );
+        } );
+
+        test( 'getContentWithSelections example', function() {
+            return vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    // [, ], { and } characters mark a ranged selection.
+                    textEditor.selection = new vscode.Selection( 0, 4, 0, 8 );
+                    assert.equal( getContent.getContentWithSelections( textEditor ), 'let [text} = "hello world!";' );
+                } );
+        } );
+    } );
 } )();

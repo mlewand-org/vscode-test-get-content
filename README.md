@@ -8,9 +8,10 @@ This helper is designed to be used in VSCode tests / extensions only.
 ## Usage
 
 ```javascript
-const getContent = require( 'vscode-test-get-content' );
+const vscode = vscode = require( 'vscode' ),
+	getContent = require( 'vscode-test-get-content' );
 
-vscode.workspace.openTextDocument( 'myFancyFile.js' )
+vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
 	.then( ( doc ) => {
 		return vscode.window.showTextDocument( doc );
 	} )
@@ -20,9 +21,10 @@ vscode.workspace.openTextDocument( 'myFancyFile.js' )
 ```
 
 ```javascript
-const getContent = require( 'vscode-test-get-content' );
+const vscode = vscode = require( 'vscode' ),
+	getContent = require( 'vscode-test-get-content' );
 
-vscode.workspace.openTextDocument( 'myFancyFile.js' )
+vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
 	.then( ( doc ) => {
 		return vscode.window.showTextDocument( doc );
 	} )
