@@ -7,6 +7,8 @@ This helper is designed to be used in VSCode tests / extensions only.
 
 ## Usage
 
+Simply getting editor content:
+
 ```javascript
 const vscode = vscode = require( 'vscode' ),
 	getContent = require( 'vscode-test-get-content' );
@@ -19,6 +21,8 @@ vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
 		assert.equal( getContent( textEditor ), 'let text = "hello world!";' );
 	} );
 ```
+
+Getting the content with selections:
 
 ```javascript
 const vscode = vscode = require( 'vscode' ),
