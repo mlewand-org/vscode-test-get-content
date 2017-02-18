@@ -43,6 +43,6 @@ vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
 
 There are three selection markers:
 
-* `^` - Marks a collapsed selection. `This is ^random text`.
+* `^` - Marks a collapsed selection. `This is ^random text`
 * `[`, `]` - Marks a ranged selection _anchor point_, so the place where ranged selection is started. `This [is random} text`
 * `{`, `}` - Marks a ranged selection _active point_, so the place selection ends. `This [is random} text`
