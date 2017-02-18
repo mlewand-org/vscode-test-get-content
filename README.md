@@ -46,3 +46,7 @@ There are three selection markers:
 * `^` - Marks a collapsed selection. `This is ^random text`
 * `[`, `]` - Marks a ranged selection _anchor point_, so the place where ranged selection is started. `This [is random} text`
 * `{`, `}` - Marks a ranged selection _active point_, so the place selection ends. `This [is random} text`
+
+## Related
+
+If you need to easily set your content with or without selection, be sure to check [vscode-test-set-content](https://www.npmjs.com/package/vscode-test-set-content) package. It follows the same idea, and allows you to set the content and selection in similarly easy way.
