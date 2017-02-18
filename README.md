@@ -1,5 +1,5 @@
 
-# vscode-test-get-content
+# vscode-test-get-content [![Build Status](https://travis-ci.org/mlewand-org/vscode-test-get-content.svg?branch=master)](https://travis-ci.org/mlewand-org/vscode-test-get-content)
 
 Provides a set of helper functions for getting content of the Visual Studio Code instance.
 
