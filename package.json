@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mlewand/vscode-test-get-content.git"
+    "url": "git+https://github.com/mlewand-org/vscode-test-get-content.git"
   },
   "keywords": [
     "vscode",
@@ -28,9 +28,9 @@
   "author": "Marek Lewandowski",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mlewand/vscode-test-get-content/issues"
+    "url": "https://github.com/mlewand-org/vscode-test-get-content/issues"
   },
-  "homepage": "https://github.com/mlewand/vscode-test-get-content#readme",
+  "homepage": "https://github.com/mlewand-org/vscode-test-get-content#readme",
   "dependencies": {
     "vscode": "^1.0.0"
   },
