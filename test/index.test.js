@@ -32,7 +32,7 @@
         } );
 
         test( 'It normalizes Windows-style line endings', function() {
-            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.txt' ) )
+            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.wintxt' ) )
                 .then( ( doc ) => {
                     return vscode.window.showTextDocument( doc );
                 } )
@@ -42,7 +42,7 @@
         } );
 
         test( 'Doesn\'t normalize Windows-style line endings if requested', function() {
-            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.txt' ) )
+            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.wintxt' ) )
                 .then( ( doc ) => {
                     return vscode.window.showTextDocument( doc );
                 } )
@@ -148,14 +148,14 @@
         } );
 
         test( 'Doesn\'t normalize Windows-style line endings if requested', function() {
-            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.txt' ) )
+            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.wintxt' ) )
                 .then( ( doc ) => {
                     return vscode.window.showTextDocument( doc );
                 } )
                 .then( textEditor => {
-                    textEditor.selection = new vscode.Selection( 0, 0, 0, 0 );
+                    textEditor.selection = new vscode.Selection( 2, 0, 2, 0 );
                     let options = { normalizeEol: false };
-                    assert.equal( mainModule.withSelection( textEditor, options ), '^aa\r\nbb\r\ncc' );
+                    assert.equal( mainModule.withSelection( textEditor, options ), 'aa\r\nbb\r\n^cc' );
                 } );
         } );
     } );
