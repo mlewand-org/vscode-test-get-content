@@ -4,13 +4,26 @@ let vscode = require( 'vscode' );
  * Returns content of a given editor.
  *
  * @param {TextEditor} editor
+ * @param {Object} [options]
+ * @param {Boolean} [options.normalizeEol=true] Whether to change Windows-style end of line characters, to Unix-style.
  * @returns {String}
  */
-function getContent( editor ) {
-    let doc = editor.document,
-        rng = new vscode.Range( 0, 0, doc.lineCount - 1, doc.lineAt( doc.lineCount - 1 ).text.length )
+function getContent( editor, options ) {
+    options = options || {};
 
-    return doc.getText( rng );
+    if ( typeof options.normalizeEol === 'undefined' ) {
+        options.normalizeEol = true;
+    }
+
+    let doc = editor.document,
+        rng = new vscode.Range( 0, 0, doc.lineCount - 1, doc.lineAt( doc.lineCount - 1 ).text.length ),
+        ret = doc.getText( rng );
+
+    if ( options.normalizeEol ) {
+        ret = ret.replace( /\r\n/g, '\n' );
+    }
+
+    return ret;
 }
 
 function _replaceSelection( content, sel, doc ) {
@@ -48,10 +61,11 @@ function _replaceSelection( content, sel, doc ) {
  * was designed simplification.
  *
  * @param {TextEditor} editor
+ * @param {Object} [options] Options object to be passed to main `getContent` method. See it's docs for reference.
  * @returns {String}
  */
-getContent.withSelection = function( editor ) {
-    let ret = getContent( editor );
+getContent.withSelection = function( editor, options ) {
+    let ret = getContent( editor, options );
 
     for ( let sel of editor.selections.reverse() ) {
         ret = _replaceSelection( ret, sel, editor.document );
