@@ -30,6 +30,27 @@
                     assert.equal( mainModule( textEditor ), expected );
                 } );
         } );
+
+        test( 'It normalizes Windows-style line endings', function() {
+            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.txt' ) )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    assert.equal( mainModule( textEditor ), 'aa\nbb\ncc' );
+                } );
+        } );
+
+        test( 'Doesn\'t normalize Windows-style line endings if requested', function() {
+            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.txt' ) )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    let options = { normalizeEol: false };
+                    assert.equal( mainModule( textEditor, options ), 'aa\r\nbb\r\ncc' );
+                } );
+        } );
     } );
 
     suite( 'getContent.withSelections', function() {
@@ -123,6 +144,18 @@
                         new vscode.Selection( 1, 1, 1, 4 )
                     ];
                     assert.equal( mainModule.withSelection( textEditor ), expected );
+                } );
+        } );
+
+        test( 'Doesn\'t normalize Windows-style line endings if requested', function() {
+            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.txt' ) )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    textEditor.selection = new vscode.Selection( 0, 0, 0, 0 );
+                    let options = { normalizeEol: false };
+                    assert.equal( mainModule.withSelection( textEditor, options ), '^aa\r\nbb\r\ncc' );
                 } );
         } );
     } );
