@@ -1,5 +1,9 @@
 let vscode = require( 'vscode' );
 
+function normalizeLineEndings( input ) {
+    return input.replace( /\r\n/g, '\n' );
+}
+
 /**
  * Returns content of a given editor.
  *
@@ -23,7 +27,7 @@ function getContent( editor, options ) {
         ret = ret.replace( /\r\n/g, '\n' );
     }
 
-    return ret;
+    return options.normalizeEol ? normalizeLineEndings( ret ) : ret;
 }
 
 function _replaceSelection( content, sel, doc ) {
@@ -65,13 +69,20 @@ function _replaceSelection( content, sel, doc ) {
  * @returns {String}
  */
 getContent.withSelection = function( editor, options ) {
+    options = options || {};
+
+    // Content retrieved can not have lines normalized yet, because it would mess offsets in _replaceSelection
+    // by stray `\n`s. So override options.normalizeEol, and store initial val for later.
+    let inputNormalizeEol = typeof options.normalizeEol !== 'undefined' ? options.normalizeEol : true;
+    options.normalizeEol = false;
+
     let ret = getContent( editor, options );
 
     for ( let sel of editor.selections.reverse() ) {
         ret = _replaceSelection( ret, sel, editor.document );
     }
 
-    return ret;
+    return inputNormalizeEol ? normalizeLineEndings( ret ) : ret;
 };
 
 module.exports = getContent;

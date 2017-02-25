@@ -147,15 +147,27 @@
                 } );
         } );
 
+        test( 'Works when Windows-style line endings get normalized', function() {
+            return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.wintxt' ) )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    textEditor.selection = new vscode.Selection( 1, 0, 2, 1 );
+                    let options = { normalizeEol: true };
+                    assert.equal( mainModule.withSelection( textEditor, options ), 'aa\n[bb\nc}c' );
+                } );
+        } );
+
         test( 'Doesn\'t normalize Windows-style line endings if requested', function() {
             return vscode.workspace.openTextDocument( path.join( __dirname, '_fixtures', 'windowsLineEndings.wintxt' ) )
                 .then( ( doc ) => {
                     return vscode.window.showTextDocument( doc );
                 } )
                 .then( textEditor => {
-                    textEditor.selection = new vscode.Selection( 2, 0, 2, 0 );
+                    textEditor.selection = new vscode.Selection( 1, 0, 2, 1 );
                     let options = { normalizeEol: false };
-                    assert.equal( mainModule.withSelection( textEditor, options ), 'aa\r\nbb\r\n^cc' );
+                    assert.equal( mainModule.withSelection( textEditor, options ), 'aa\r\n[bb\r\nc}c' );
                 } );
         } );
     } );
