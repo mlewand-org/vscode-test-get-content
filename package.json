@@ -1,6 +1,6 @@
 {
   "name": "vscode-test-get-content",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "A set of helper functions for getting content of the Visual Studio Code instance.",
   "publisher": "mlewand",
   "engines": {
