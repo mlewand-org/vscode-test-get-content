@@ -233,5 +233,28 @@
                     assert.equal( getContent.withSelection( textEditor ), 'let [text} = "hello world!";' );
                 } );
         } );
+
+        test( 'Markers customization', function() {
+            return vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    let options = {
+                        caret: '🍕',
+                        active: {
+                            start: '🚒',
+                            end: '🚒'
+                        },
+                        anchor: {
+                            start: '🦄',
+                            end: '🦄'
+                        }
+                    };
+
+                    textEditor.selection = new vscode.Selection( 0, 4, 0, 8 ); // Select "text"" word.
+                    assert.equal( getContent.withSelection( textEditor, options ), 'let 🦄text🚒 = "hello world!";' );
+                } );
+        } );
     } );
 } )();
