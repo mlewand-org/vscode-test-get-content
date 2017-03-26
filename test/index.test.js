@@ -5,7 +5,8 @@
     const assert = require( 'assert' ),
         vscode = require( 'vscode' ),
         path = require( 'path' ),
-        mainModule = require( '../src' );
+        mainModule = require( '../src' ),
+        setContent = require( 'vscode-test-set-content' );
 
     suite( 'getContent', function() {
         test( 'It works with a single line', function() {
@@ -170,6 +171,42 @@
                     assert.equal( mainModule.withSelection( textEditor, options ), 'aa\r\n[bb\r\nc}c' );
                 } );
         } );
+
+        test( 'It supports customizing collapsed selection', function() {
+            return setContent.withSelection( 'fo^oba🦄r', {
+                    caret: '🦄'
+                } )
+                .then( textEditor => {
+                    assert.equal( mainModule.withSelection( textEditor, {
+                        caret: '🚒'
+                    } ), 'fo^oba🚒r' );
+                } );
+        } );
+
+        test( 'It supports customizing ranged selection', function() {
+            return setContent.withSelection( '[}f🍕ooba🍔r', {
+                    active: {
+                        start: '🍣',
+                        end: '🍔'
+                    },
+                    anchor: {
+                        start: '🍕',
+                        end: '🍚'
+                    }
+                } )
+                .then( textEditor => {
+                    assert.equal( mainModule.withSelection( textEditor, {
+                        active: {
+                            start: '🚒',
+                            end: '🚒'
+                        },
+                        anchor: {
+                            start: '🦄',
+                            end: '🦄'
+                        }
+                    } ), '[}f🦄ooba🚒r' );
+                } );
+        } );
     } );
 
     suite( 'Readme.md examples', function() {
@@ -194,6 +231,29 @@
                     // [, ], { and } characters mark a ranged selection.
                     textEditor.selection = new vscode.Selection( 0, 4, 0, 8 );
                     assert.equal( getContent.withSelection( textEditor ), 'let [text} = "hello world!";' );
+                } );
+        } );
+
+        test( 'Markers customization', function() {
+            return vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
+                .then( ( doc ) => {
+                    return vscode.window.showTextDocument( doc );
+                } )
+                .then( textEditor => {
+                    let options = {
+                        caret: '🍕',
+                        active: {
+                            start: '🚒',
+                            end: '🚒'
+                        },
+                        anchor: {
+                            start: '🦄',
+                            end: '🦄'
+                        }
+                    };
+
+                    textEditor.selection = new vscode.Selection( 0, 4, 0, 8 ); // Select "text"" word.
+                    assert.equal( getContent.withSelection( textEditor, options ), 'let 🦄text🚒 = "hello world!";' );
                 } );
         } );
     } );

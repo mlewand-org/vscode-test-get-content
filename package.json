@@ -32,12 +32,14 @@
   },
   "homepage": "https://github.com/mlewand-org/vscode-test-get-content#readme",
   "dependencies": {
+    "clone": "^2.1.1",
     "vscode": "^1.0.0"
   },
   "devDependencies": {
-    "typescript": "^2.0.3",
-    "mocha": "^2.3.3",
+    "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
-    "@types/mocha": "^2.2.32"
+    "mocha": "^2.3.3",
+    "typescript": "^2.0.3",
+    "vscode-test-set-content": "^1.1.0"
   }
 }

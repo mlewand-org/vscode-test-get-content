@@ -1,7 +1,32 @@
-let vscode = require( 'vscode' );
+let vscode = require( 'vscode' )
+    clone = require( 'clone' );
 
 function normalizeLineEndings( input ) {
     return input.replace( /\r\n/g, '\n' );
+}
+
+function getOptions( inOptions ) {
+    inOptions = clone( inOptions ) || {};
+
+    if ( typeof inOptions.normalizeEol === 'undefined' ) {
+        inOptions.normalizeEol = true;
+    }
+
+    inOptions.caret = inOptions.caret || '^';
+
+    inOptions.language = inOptions.language || 'text';
+
+    inOptions.anchor = inOptions.anchor || {
+        start: '[',
+        end: ']'
+    };
+
+    inOptions.active = inOptions.active || {
+        start: '{',
+        end: '}'
+    };
+
+    return inOptions;
 }
 
 /**
@@ -13,11 +38,7 @@ function normalizeLineEndings( input ) {
  * @returns {String}
  */
 function getContent( editor, options ) {
-    options = options || {};
-
-    if ( typeof options.normalizeEol === 'undefined' ) {
-        options.normalizeEol = true;
-    }
+    options = getOptions( options );
 
     let doc = editor.document,
         rng = new vscode.Range( 0, 0, doc.lineCount - 1, doc.lineAt( doc.lineCount - 1 ).text.length ),
@@ -30,15 +51,15 @@ function getContent( editor, options ) {
     return options.normalizeEol ? normalizeLineEndings( ret ) : ret;
 }
 
-function _replaceSelection( content, sel, doc ) {
+function _replaceSelection( content, sel, doc, options ) {
     if ( sel.isEmpty ) {
         let selOffset = doc.offsetAt( sel.start );
-        content = content.substr( 0, selOffset ) + '^' + content.substr( selOffset );
+        content = content.substr( 0, selOffset ) + options.caret + content.substr( selOffset );
     } else {
         let startOffset = doc.offsetAt( sel.start ),
             endOffset = doc.offsetAt( sel.end ),
-            startMarker = sel.start.isEqual( sel.active ) ? '{' : '[',
-            endMarker = sel.end.isEqual( sel.active ) ? '}' : ']';
+            startMarker = sel.start.isEqual( sel.active ) ? options.active.start : options.anchor.start,
+            endMarker = sel.end.isEqual( sel.active ) ? options.active.end : options.anchor.end;
 
         content = content.substr( 0, startOffset ) + startMarker +
             content.substring( startOffset, endOffset ) + endMarker +
@@ -69,7 +90,7 @@ function _replaceSelection( content, sel, doc ) {
  * @returns {String}
  */
 getContent.withSelection = function( editor, options ) {
-    options = options || {};
+    options = getOptions( options );
 
     // Content retrieved can not have lines normalized yet, because it would mess offsets in _replaceSelection
     // by stray `\n`s. So override options.normalizeEol, and store initial val for later.
@@ -79,7 +100,7 @@ getContent.withSelection = function( editor, options ) {
     let ret = getContent( editor, options );
 
     for ( let sel of editor.selections.reverse() ) {
-        ret = _replaceSelection( ret, sel, editor.document );
+        ret = _replaceSelection( ret, sel, editor.document, options );
     }
 
     return inputNormalizeEol ? normalizeLineEndings( ret ) : ret;
