@@ -35,6 +35,13 @@ function getOptions( inOptions ) {
  * @param {TextEditor} editor
  * @param {Object} [options]
  * @param {Boolean} [options.normalizeEol=true] Whether to change Windows-style end of line characters, to Unix-style.
+ * @param {String} [options.caret='^'] Character used to represent caret (collapsed selection).
+ * @param {Object} [options.anchor]
+ * @param {String} [options.anchor.start='['] Selection anchor open character.
+ * @param {String} [options.anchor.end=']'] Selection anchor close character.
+ * @param {Object} [options.active]
+ * @param {String} [options.active.start='{'] Selection active part open character.
+ * @param {String} [options.active.end='}'] Selection active part close character.
  * @returns {String}
  */
 function getContent( editor, options ) {
