@@ -39,6 +39,17 @@ vscode.workspace.openTextDocument( __dirname + '/_fixtures/myFancyFile.txt' )
 	} );
 ```
 
+## Options
+
+Both main `getContent` and `withSelection` methods take optional `options` object as a second argument.
+
+* `options.normalizeEol` - Boolean - Whether to change Windows-style end of line characters, to Unix-style. Defaults to `true`.
+* `options.caret` - String - Character used to represent caret (collapsed selection). Defaults to `"^"`.
+* `options.anchor.start` - String - Selection anchor open character. Defaults to `"["`.
+* `options.anchor.end` - String - Selection anchor close character. Defaults to `"]"`.
+* `options.active.start` - String - Selection active part open character. Defaults to `"{"`.
+* `options.active.end` - String - Selection active part close character. Defaults to `"}"`.
+
 ## Selection Markers
 
 There are three selection markers:
