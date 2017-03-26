@@ -5,7 +5,8 @@
     const assert = require( 'assert' ),
         vscode = require( 'vscode' ),
         path = require( 'path' ),
-        mainModule = require( '../src' );
+        mainModule = require( '../src' ),
+        setContent = require( 'vscode-test-set-content' );
 
     suite( 'getContent', function() {
         test( 'It works with a single line', function() {
@@ -168,6 +169,42 @@
                     textEditor.selection = new vscode.Selection( 1, 0, 2, 1 );
                     let options = { normalizeEol: false };
                     assert.equal( mainModule.withSelection( textEditor, options ), 'aa\r\n[bb\r\nc}c' );
+                } );
+        } );
+
+        test( 'It supports customizing collapsed selection', function() {
+            return setContent.withSelection( 'fo^oba🦄r', {
+                    caret: '🦄'
+                } )
+                .then( textEditor => {
+                    assert.equal( mainModule.withSelection( textEditor, {
+                        caret: '🚒'
+                    } ), 'fo^oba🚒r' );
+                } );
+        } );
+
+        test( 'It supports customizing ranged selection', function() {
+            return setContent.withSelection( '[}f🍕ooba🍔r', {
+                    active: {
+                        start: '🍣',
+                        end: '🍔'
+                    },
+                    anchor: {
+                        start: '🍕',
+                        end: '🍚'
+                    }
+                } )
+                .then( textEditor => {
+                    assert.equal( mainModule.withSelection( textEditor, {
+                        active: {
+                            start: '🚒',
+                            end: '🚒'
+                        },
+                        anchor: {
+                            start: '🦄',
+                            end: '🦄'
+                        }
+                    } ), '[}f🦄ooba🚒r' );
                 } );
         } );
     } );
